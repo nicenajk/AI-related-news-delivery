@@ -1,0 +1,36 @@
+import os
+import requests
+import json
+from datetime import datetime
+
+# GitHub Secrets에서 정보 가져오기
+GEMINI_KEY = os.environ.get('GEMINI_API_KEY')
+TELE_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
+CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
+
+def get_ai_briefing():
+    keywords = ["외식업 AI 자동화", "심리상담 AI 트렌드", "비즈니스 에이전트"]
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}"
+    
+    briefing_text = f"📅 {datetime.now().strftime('%Y-%m-%d')} AI 경영 브리핑\n\n"
+    
+    for kw in keywords:
+        prompt = f"30년 경력 경영자 관점에서 '{kw}' 관련 최신 트렌드 1개를 제목, 3줄 요약으로 정리해줘."
+        data = {"contents": [{"parts": [{"text": prompt}]}]}
+        
+        try:
+            res = requests.post(url, json=data)
+            content = res.json()['candidates'][0]['content']['parts'][0]['text']
+            briefing_text += f"🔍 {kw}\n{content}\n{'-'*20}\n"
+        except:
+            continue
+    return briefing_text
+
+def send_telegram(text):
+    url = f"https://api.telegram.org/bot{TELE_TOKEN}/sendMessage"
+    payload = {"chat_id": CHAT_ID, "text": text}
+    requests.post(url, json=payload)
+
+if __name__ == "__main__":
+    report = get_ai_briefing()
+    send_telegram(report)
