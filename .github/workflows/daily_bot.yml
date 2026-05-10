@@ -3,9 +3,8 @@ name: Daily AI Briefing Bot
 on:
   schedule:
     - cron: '30 23 * * *' # 한국 시간 오전 8시 30분
-  workflow_dispatch: # 수동 실행 버튼
+  workflow_dispatch: # 수동 실행 기능
 
-# 여기서 Node.js 24 사용을 전체적으로 강제합니다.
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -22,9 +21,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests python-docx
+        run: pip install requests
 
       - name: Run bot
         env:
