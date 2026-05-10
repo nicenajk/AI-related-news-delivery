@@ -5,17 +5,21 @@ on:
     - cron: '30 23 * * *' # 한국 시간 오전 8시 30분
   workflow_dispatch: # 수동 실행 버튼
 
+# 여기서 Node.js 24 사용을 전체적으로 강제합니다.
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # v3에서 v4로 업데이트
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5 # v4에서 v5로 업데이트
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11' # 더 안정적인 최신 파이썬 버전
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
@@ -27,5 +31,4 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Node.js 24 강제 설정
         run: python main.py
