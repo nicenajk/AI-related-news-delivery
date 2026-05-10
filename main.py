@@ -29,7 +29,7 @@ def get_working_model():
         return "gemini-1.5-flash-latest" # 실패 시 기본값 설정
 
 def get_ai_data(model_name):
-    keywords = ["외식업 AI 자동화", "심리상담 AI 트렌드", "비즈니스 에이전트"]
+    keywords = ["외식업 AI 자동화", "심리상담 AI 트렌드", "비즈니스 에이전트", "외식업 AI활용", "AI도입"]
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={GEMINI_KEY}"
     headers = {'Content-Type': 'application/json'}
     reports = []
